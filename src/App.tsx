@@ -742,22 +742,28 @@ function Dashboard({ deals, analysis }: { deals: Deal[], analysis: AIAnalysisRes
             </div>
             
             <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed">
-              {analysis.executiveSummary.split('\n').map((line, i) => (
-                <p key={i} className="mb-3">{line}</p>
-              ))}
+              {analysis.executiveSummary
+                ? analysis.executiveSummary.split('\n').map((line, i) => (
+                    <p key={i} className="mb-3">{line}</p>
+                  ))
+                : <p className="text-gray-400 italic">No executive summary available.</p>
+              }
             </div>
-            
+
             <div className="mt-8 pt-6 border-t border-gray-100">
               <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Recommended Actions</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {analysis.recommendedActions.map((action, i) => (
-                  <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer group border border-transparent hover:border-gray-200">
-                    <div className="mt-0.5 w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center group-hover:border-[#FF5C35] group-hover:bg-[#FF5C35] transition-colors shrink-0">
-                      <ChevronRight className="w-3 h-3 text-transparent group-hover:text-white" />
+                {(analysis.recommendedActions ?? []).length > 0
+                  ? (analysis.recommendedActions ?? []).map((action, i) => (
+                    <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer group border border-transparent hover:border-gray-200">
+                      <div className="mt-0.5 w-5 h-5 rounded-full border border-gray-300 flex items-center justify-center group-hover:border-[#FF5C35] group-hover:bg-[#FF5C35] transition-colors shrink-0">
+                        <ChevronRight className="w-3 h-3 text-transparent group-hover:text-white" />
+                      </div>
+                      <span className="text-sm text-gray-700">{action}</span>
                     </div>
-                    <span className="text-sm text-gray-700">{action}</span>
-                  </div>
-                ))}
+                  ))
+                  : <p className="text-gray-400 italic col-span-2">No recommended actions available.</p>
+                }
               </div>
             </div>
           </motion.div>
