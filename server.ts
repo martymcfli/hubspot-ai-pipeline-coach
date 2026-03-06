@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 
 // Initialize Express
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -403,7 +403,11 @@ app.post("/api/ai/analyze-competitors", async (req, res) => {
 
 // --- Vite Middleware ---
 async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV === "production") {
+    // Serve built static files in production
+    const { default: sirv } = await import("sirv");
+    app.use(sirv("dist", { single: true }));
+  } else {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
